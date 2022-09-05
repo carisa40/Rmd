@@ -1,0 +1,68 @@
+---
+title: "ANA515 Assignment 1"
+author: "Anita Blege"
+date: "2022-09-02"
+output:
+  word_document: default
+  html_document: default
+theme: bootswatch:"minty"
+---
+
+
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+library(bslib)
+library(tidyverse)
+library(knitr)
+```
+
+
+
+```{r, include = FALSE}
+gun_deaths <- read.csv('https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv')
+```
+
+
+```{r, include = FALSE}
+youth <- gun_deaths %>% 
+  filter(age <= 65)
+```
+
+
+```{r, include = FALSE}
+row_number_all <- nrow(gun_deaths)
+```
+
+```{r, include = FALSE}
+row_number_aged <- row_number_all - nrow(youth)
+
+```
+
+
+
+```{r, include = FALSE}
+youth_summary <- summarize(youth)
+```
+
+
+We have data about `r row_number_all` individuals killed by guns. Only `r row_number_aged` are older than 65. The distribution of the remainder is shown below: 
+
+
+Gun deaths by age
+
+```{r youth-dist, echo=FALSE}
+youth %>%
+  ggplot(aes(age)) + geom_freqpoly(binwidth=1)
+```
+
+
+
+Gun deaths by race
+
+```{r race-dist, echo=FALSE}
+youth %>%
+ggplot(aes(fct_infreq(race)%>%fct_rev())) + geom_bar() + coord_flip() + labs(x="Victim race")
+
+```
